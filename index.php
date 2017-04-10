@@ -39,14 +39,16 @@
 				<form role="form" action="index.php" method="get">
 					<div class="col-lg-11">
 						<div class="form-group">
-							<input class="form-control" placeholder="Search books" id="searchterm" name="searchterm" value=
 								<?php
 									if(isset($_GET["searchterm"]))
 									{
-										echo $_GET["searchterm"];
+										echo '<input class="form-control" placeholder="Search books" id="searchterm" name="searchterm" value="'.$_GET["searchterm"].'"/>';
+									}
+									else
+									{
+										echo '<input class="form-control" placeholder="Search books" id="searchterm" name="searchterm" value=""/>';
 									}
 								?>
-							/>
 						</div>
 					</div>
 					<div class="col-lg-1">
@@ -59,41 +61,33 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel">
-						<div class="panel-heading">
-							<h1>Books</h1>
-						</div>
 						<div class="panel-body">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th id="id">id</th>
-										<th id="title">title</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
-										if(isset($_GET["searchterm"]))
-										{
-											//db connection
-											$conn = new mysqli("localhost", "Webgebruiker", "Labo2017");
-											
-											mysqli_select_db($conn, "books");
-											
-											$sql = "SELECT * FROM books.books WHERE title LIKE '%".$_GET["searchterm"]."%'";
-											
-											$books = mysqli_query($conn, $sql);
+							<h2>
+								<?php
+									if(isset($_GET["searchterm"]))
+									{
+										//db connection
+										$conn = new mysqli("localhost", "Webgebruiker", "Labo2017") or die("error.");
+										
+										mysqli_select_db($conn, "books") or die("error.");
+										
+										$sql = "SELECT * FROM books.books WHERE title LIKE '%".$_GET["searchterm"]."%'";
+										
+										$books = mysqli_query($conn, $sql) or die("error.");
 
-											while ($book = mysqli_fetch_object($books))
-											{
-												echo '<tr>
-														<td id="id">'.$book->id.'</td>
-														<td id="title">'.$book->title.'</td>
-													</tr>';
-											};
+										$numresults = mysqli_num_rows($books) or die("error.");
+										
+										if($numresults == 0)
+										{
+											echo "No books exist with this title.";
 										}
-									?>
-								</tbody>
-							</table>
+										else
+										{
+											echo "One or more books exist.";
+										}
+									}
+								?>
+							</h2>
 						</div>
 					</div>
 				</div>
