@@ -16,9 +16,6 @@
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-		<!-- Custom styles for this template -->
-		<link href="./css/main.css" rel="stylesheet">
-
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -74,16 +71,25 @@
 										$sql = "SELECT * FROM books.books WHERE title LIKE '%".$_GET["searchterm"]."%'";
 										
 										$books = mysqli_query($conn, $sql) or die("error.");
+										
+										//DEBUG
+										/*echo $sql."<br />";
 
-										$numresults = mysqli_num_rows($books) or die("error.");
+										while ($row = mysqli_fetch_object($books))
+										{
+											echo $row->id."  ";
+											echo $row->title."<br />";
+										};
+										*/
+										$numresults = mysqli_num_rows($books);
 										
 										if($numresults == 0)
 										{
-											echo "No books exist with this title.";
+											echo "No books exist with this pattern in the title.";
 										}
 										else
 										{
-											echo "One or more books exist.";
+											echo "$numresults books exist with this pattern in the title.";
 										}
 									}
 								?>
